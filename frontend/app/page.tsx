@@ -33,7 +33,8 @@ export default function Home() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await axios.post('http://localhost:3001/api/upload', formData, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      const response = await axios.post(`${apiUrl}/api/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
