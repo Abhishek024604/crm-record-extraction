@@ -42,14 +42,14 @@ Fields to populate:
 
     try {
       const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "models/gemini-3.5-flash",
         systemInstruction: systemPrompt,
         generationConfig: { responseMimeType: "application/json" }
       });
 
       const response = await model.generateContent(JSON.stringify(chunk));
       let responseText = response.response.text().trim();
-      
+
       console.log("=========================================");
       console.log(`[AI Response for chunk ${i / CHUNK_SIZE + 1}]:`);
       console.log(responseText);
