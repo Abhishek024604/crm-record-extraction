@@ -18,7 +18,7 @@ STRICT INSTRUCTIONS:
 4. Date Format: 'created_at' MUST be a valid ISO string.
 5. Combine multiple emails into 'crm_note',keep the first email in 'email'.
 6. Combine multiple mobile numbers into 'crm_note', keep the first in 'mobile_without_country_code'.
-7. Append any extra useful information to 'crm_note'.
+7. Append any useful information to 'crm_note'.
 8. The result MUST have exactly the same number of rows as the input.
 
 Fields to populate:
@@ -63,20 +63,20 @@ Fields to populate:
       try {
         // Attempt to extract raw array between [ and ]
         const arrayMatch = responseText.match(/\[[\s\S]*\]/);
-        
+
         if (arrayMatch) {
-            parsedChunk = JSON.parse(arrayMatch[0]);
+          parsedChunk = JSON.parse(arrayMatch[0]);
         } else if (responseText.trim().startsWith("{")) {
-            const obj = JSON.parse(responseText.trim());
-            // Find the first array property in the object
-            const arrayKey = Object.keys(obj).find(k => Array.isArray(obj[k]));
-            if (arrayKey) {
-                parsedChunk = obj[arrayKey];
-            } else {
-                throw new Error("No array found inside the JSON object.");
-            }
+          const obj = JSON.parse(responseText.trim());
+          // Find the first array property in the object
+          const arrayKey = Object.keys(obj).find(k => Array.isArray(obj[k]));
+          if (arrayKey) {
+            parsedChunk = obj[arrayKey];
+          } else {
+            throw new Error("No array found inside the JSON object.");
+          }
         } else {
-            throw new Error("Response is neither an array nor a JSON object.");
+          throw new Error("Response is neither an array nor a JSON object.");
         }
       } catch (e) {
         console.error("JSON Parsing failed on:", responseText);
