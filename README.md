@@ -20,7 +20,7 @@ An intelligent, full-stack CRM data importer that leverages LLM's reasoning to i
 
 - **Frontend:** Next.js, React, Tailwind CSS, Lucide Icons, Axios, PapaParse, React Dropzone.
 - **Backend:** Node.js, Express, Multer (for file handling), Google AI SDK, CSV-Parser.
-- **AI Model:** Google Generative AI (`gemini-2.5-flash`).
+- **AI Model:** Inferencing using Cerebras.
 
 ## ⚙️ Setup & Installation
 
@@ -41,7 +41,7 @@ npm install
 ```
 Create a `.env` file in the `backend` directory and add your Google AI API Key:
 ```env
-GOOGLE_AI_API_KEY="your_google_ai_studio_api_key_here"
+CEREBRAS_API_KEY="your_cerebras_api_key_here"
 ```
 Start the backend server (runs on port 3001 by default):
 ```bash
