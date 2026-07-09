@@ -42,7 +42,7 @@ Fields to populate:
 
     try {
       const model = genAI.getGenerativeModel({
-        model: "models/gemini-3.5-flash",
+        model: "gemini-3.5-flash",
         systemInstruction: systemPrompt,
         generationConfig: { responseMimeType: "application/json" }
       });
