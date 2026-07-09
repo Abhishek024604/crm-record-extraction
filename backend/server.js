@@ -12,6 +12,10 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use('/api', uploadRoutes);
 
+// Health check route for Render deployment
+app.get('/', (req, res) => {
+  res.send('CRM Extraction Backend is running! The API endpoint is at /api/upload');
+});
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
