@@ -48,8 +48,7 @@ Fields to populate:
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: JSON.stringify(chunk) }
-        ],
-        response_format: { type: "json_object" }
+        ]
       });
 
       let responseText = response.choices[0].message.content.trim();
