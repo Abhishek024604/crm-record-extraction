@@ -1,6 +1,9 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const OpenAI = require('openai');
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
+const cerebras = new OpenAI({
+  baseURL: 'https://api.cerebras.ai/v1',
+  apiKey: process.env.CEREBRAS_API_KEY, 
+});
 
 exports.extractCRMRecords = async (records) => {
   const CHUNK_SIZE = 50;
@@ -17,7 +20,6 @@ STRICT INSTRUCTIONS:
 6. Combine multiple mobile numbers into 'crm_note', keep the first in 'mobile_without_country_code'.
 7. Append any extra useful information to 'crm_note'.
 8. The result MUST have exactly the same number of rows as the input.
-
 
 Fields to populate:
 - created_at: ISO format date string
@@ -41,24 +43,35 @@ Fields to populate:
     const chunk = records.slice(i, i + CHUNK_SIZE);
 
     try {
-      const model = genAI.getGenerativeModel({
-        model: "gemini-3.5-flash",
-        systemInstruction: systemPrompt,
-        generationConfig: { responseMimeType: "application/json" }
+      const response = await cerebras.chat.completions.create({
+        model: 'llama3.3-70b',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: JSON.stringify(chunk) }
+        ],
+        response_format: { type: "json_object" }
       });
 
-      const response = await model.generateContent(JSON.stringify(chunk));
-      let responseText = response.response.text().trim();
+      let responseText = response.choices[0].message.content.trim();
 
       console.log("=========================================");
       console.log(`[AI Response for chunk ${i / CHUNK_SIZE + 1}]:`);
       console.log(responseText);
       console.log("=========================================\n");
 
-      // Robustly extract the JSON array from the response in case the LLM includes conversational text
+      // Robustly extract the JSON array from the response
       const arrayMatch = responseText.match(/\[[\s\S]*\]/);
       if (arrayMatch) {
         responseText = arrayMatch[0];
+      } else if (responseText.startsWith("{")) {
+        // Sometimes JSON mode returns an object with the array inside
+        const obj = JSON.parse(responseText);
+        const keys = Object.keys(obj);
+        if (keys.length === 1 && Array.isArray(obj[keys[0]])) {
+           responseText = JSON.stringify(obj[keys[0]]);
+        } else {
+           throw new Error("AI response did not contain a valid JSON array.");
+        }
       } else {
         throw new Error("AI response did not contain a valid JSON array.");
       }
