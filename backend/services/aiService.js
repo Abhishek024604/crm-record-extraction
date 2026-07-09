@@ -1,11 +1,11 @@
 const OpenAI = require('openai');
 
-const cerebras = new OpenAI({
-  baseURL: 'https://api.cerebras.ai/v1',
-  apiKey: process.env.CEREBRAS_API_KEY, 
-});
-
 exports.extractCRMRecords = async (records) => {
+  const cerebras = new OpenAI({
+    baseURL: 'https://api.cerebras.ai/v1',
+    apiKey: process.env.CEREBRAS_API_KEY, 
+  });
+
   const CHUNK_SIZE = 50;
   const allExtracted = [];
 
