@@ -1,0 +1,6 @@
+node_modules/
+.env
+fetch-models.js
+test-ai.js
+test-extraction.js
+test-upload.js
