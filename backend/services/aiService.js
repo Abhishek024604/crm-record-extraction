@@ -44,7 +44,7 @@ Fields to populate:
 
     try {
       const response = await cerebras.chat.completions.create({
-        model: 'llama3.3-70b',
+        model: 'gemma-4-31b',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: JSON.stringify(chunk) }
